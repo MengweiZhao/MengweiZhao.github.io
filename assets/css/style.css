@@ -1,0 +1,5 @@
+@import "{{ site.theme }}";
+
+body {
+    background-image: url(../image/m31_gendler_2700.jpg);
+};

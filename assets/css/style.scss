@@ -3,7 +3,7 @@
 
 @import "{{ site.theme }}";
 
-body {
+#main_content_wrap {
     background-image: url(../image/m31_gendler_2700.jpg);
     background-position : 100% 100%;
     background-attachment : fixed

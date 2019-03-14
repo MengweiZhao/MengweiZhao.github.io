@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>温暖的小屋</title>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+	<script src="./js/vue.js"></script>
+	<script src="./js/jquery-1.12.4.js"></script>
+	<link href="./js/bootstrap-4.1.1-dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="./js/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>
+	<!-- <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+	<script>
+		Date.prototype.Format = function (fmt) {
+		    var o = {
+		        "M+": this.getMonth() + 1, //月份
+		        "d+": this.getDate(), //日
+		        "h+": this.getHours(), //小时
+		        "m+": this.getMinutes(), //分
+		        "s+": this.getSeconds(), //秒
+		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+		        "S": this.getMilliseconds() //毫秒
+		    };
+		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		}
+	</script>
+</head>
+<body style="background-color: #e5e5e5">
+	<!-- start navigation fixed-top-->
+    <nav class="navbar navbar navbar-expand-sm bg-secondary navbar-dark" role="navigation">
+    	<a class="navbar-brand" href="#">Tools</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+			    <li class="nav-item active">
+			      <a class="nav-link" href="#">首页</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="#mills2Str">时间</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="#lower-upper">大小写</a>
+			    </li>
+			    <!-- Dropdown -->
+			    <li class="nav-item dropdown">
+			      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+			        更多
+			      </a>
+			      <div class="dropdown-menu">
+			        <a class="dropdown-item" href="#toBase64">base64</a>
+			      </div>
+			    </li>
+		    </ul>
+		    <!-- Navbar text-->
+			<span class="navbar-text">
+			    js小工具
+			</span>
+			<form class="form-inline">
+			    <input class="form-control" type="text" placeholder="Search">
+			    <button class="btn btn-success" type="button">Search</button>
+			</form>
+	    </div>
+        <span class="pull-right" id="liveclock" v-html="message"></span>
+	</nav>
+    <!-- end navigation -->
+	<div id="mills2Str">
+		<p class="lead text-primary"><strong><em>毫秒-日期转换</em></strong></p>
+		<form role="form" class="form-inline">
+		  <div class="form-group">
+		    <label for="name">毫秒</label>
+		    <input type="number" placeholder="unix time" id="mill" v-model="mills" v-on:mouseleave="calculate();" class="form-control">
+		  </div>
+		  <div v-html="message"></div>
+		</form>
+	</div>
+
+	<div id="lower-upper">
+		<p class="lead text-primary"><strong><em>大小写转换</em></strong></p>
+		<div class="row">
+			<div class="col">
+				<form role="form">
+				  <div class="form-group">
+				    <label for="name">原始文本</label>
+				    <textarea name="raw-text" id="raw-text" v-model="rawText" placeholder="待转换文本" class="form-control" rows="4"></textarea>
+				  </div>
+				</form>
+			</div>
+			<div class="col">
+				<form role="form">
+				  <div class="form-group">
+				    <label for="name">转换后文本</label>
+				    <textarea name="new-text" id="new-text" v-model="newText" placeholder="转换后文本" class="form-control" rows="4"></textarea>
+				  </div>
+				</form>
+			</div>
+	    </div>
+		<button v-on:click="str2Upper();" class="btn btn-default">全大写</button>
+		<button v-on:click="str2Lower();" class="btn btn-default">全小写</button>
+		<button v-on:click="str2SQL();" class="btn btn-default">SQL</button>
+	</div>
+	<div id="toBase64">
+		<p class="lead text-primary"><strong><em>BASE64转换</em></strong></p>
+		<div class="row">
+			<div class="col">
+				<form role="form">
+				  <div class="form-group">
+				    <label for="name">原始文本</label>
+				    <textarea name="raw-text" id="raw-text" v-model="rawText" placeholder="待转换文本" class="form-control" rows="2"></textarea>
+				  </div>
+				</form>
+			</div>
+			<div class="col">
+				<form role="form">
+				  <div class="form-group">
+				    <label for="name">转换后文本</label>
+				    <textarea name="new-text" id="new-text" v-model="newText" placeholder="转换后文本" class="form-control" rows="2"></textarea>
+				  </div>
+				</form>
+			</div>
+	    </div>
+		<button v-on:click="encodeBase64();" class="btn btn-default">编码</button>
+		<button v-on:click="decodeBase64();" class="btn btn-default">解码</button>
+	</div>
+	<div>
+		<address>
+		  <strong></strong><br>
+		  <br>
+		  <br>
+		  <abbr title="Phone"></abbr>
+		</address>
+		<address>
+			<strong>上贤正则</strong><br>
+			<a href="mailto:#">z_movie@163.com</a>
+		</address>
+	</div>
+	<div>
+		<p id="ip" class="text-muted text-right" style="font-size: 10px"></p>
+		<script>
+	  		$.ajax({
+			    url:'http://ip.chinaz.com/getip.aspx',//可以不是本地域名
+			    type:'get',
+			    dataType:'jsonp',  //jsonp格式访问
+			})
+			.done(function(data){
+			    console.log(data.ip);
+			    $("#ip").text("您来自："+data.ip+" 所在区域："+data.address);
+			})
+			.fail(function() {
+			    console.log('服务器超时，请重试！');
+			});
+		</script>
+	</div>
+	<div style="position:absolute;top: 10%;right: 30px;width:160px;height:70px;margin: 0px;border: 0px;">
+	<script charset="Shift_JIS" src="./js/honehone_clock_wh.js">
+
+	</script>
+	</div>
+	<div id="clustrmaps-widget"></div>
+
+	<p style="text-align:center;position:absolute;bottom:0;width:100%;height:30px;">
+		<span style="font-family:arial;color:#666666;font-size:12px;">
+			Copyright &copy; <a href="http://www.self2world.top//" target="_blank" style="font-family:arial;color:#666666;font-size:12px;">温暖的小屋</a>
+			<a href="http://www.miitbeian.gov.cn/" target="_blank" style="font-family:arial;color:#666666;font-size:12px;">浙ICP备17035198号-1</a>
+		</span>
+	</p>
+	<!-- <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <span>Copyright &copy; <a href="http://www.self2world.top//">温暖的小屋</a></span> |
+                    <span><a href="http://www.miibeian.gov.cn/" target="_blank">浙ICP备17035198号</a></span> |
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+	<script>
+		function DandTArray() {
+			for(i=0;i<DandTArray.arguments.length; i++)
+			this[i] = DandTArray.arguments[i];
+		}
+		var app = new Vue({
+		  el: '#liveclock',
+		  data: {
+		  	message: "",
+		  	timeOut: ''
+		  },
+		  methods: {
+			showclock: function() {
+				var Now=new Date();
+				var DandTMonths=new DandTArray("1","2","3","4","5","6",
+				"7","8","9","10","11","12");
+				var DandTDays= new DandTArray("星期日","星期一","星期二","星期三",
+				"星期四","星期五","星期六","星期日");
+				var hrs=Now.getHours();
+				var min=Now.getMinutes();
+				var sec=Now.getSeconds();
+				DandTClockh=""+((hrs>12)?hrs-12:hrs);
+				DandTClockm=((min<10)?"0":"")+min;
+				DandTClocks=((sec<10)?"0":"")+sec;
+				DandTClock=(hrs>=12)?"P.M.":"A.M.";
+				<!-- 这里可以改变时钟的大小 -->
+				myclock=Now.getFullYear()+"年"+DandTMonths[Now.getMonth()]
+				+"月"+Now.getDate()+"日 "+DandTDays[Now.getDay()]+"&nbsp"+
+				"<b>"+DandTClockh+":"+DandTClockm+":"+
+				DandTClocks+" "+DandTClock+"</b>";
+				this.message=myclock;
+			}
+		  },
+		  mounted: function () {
+            this.$nextTick(function () {
+                setInterval(this.showclock, 1000);
+            })
+          },
+		});
+		var app1 = new Vue({
+		  el: '#mills2Str',
+		  data: {
+		  	greet: "hello",
+		  	mills: "",
+		  	message: ""
+		  },
+		  methods: {
+		    calculate: function () {
+		    	if(this.mills){
+		    		var date = new Date(parseInt(this.mills)).Format("yyyy-MM-dd hh:mm:ss");
+					console.log(date);
+					this.message = "<p>" + date + "</p>";
+		    	}
+			}
+		  }
+		});
+		var app2 = new Vue({
+		  el: '#lower-upper',
+		  data: {
+		  	greet: "hello",
+		  	rawText: "",
+		  	newText: ""
+		  },
+		  methods: {
+		    str2Upper: function () {
+		    	if(this.rawText){
+					this.newText = this.rawText.toUpperCase();
+		    	}
+			},
+			str2Lower: function () {
+				if(this.rawText){
+					this.newText = this.rawText.toLowerCase();
+		    	}
+			},
+			str2SQL: function () {
+				if(this.rawText){
+					var reg = /\b(select|update|delete|insert|where|from|group|order|by|having|left|join|right|and|or|not|begin|end|alter|modify|create|exist|in|as|like|on|set|delete|drop|add|table|tables|schema|schemas|delimiter|procedure|function|declare|fetch|loop|case|then|cursor|open|into|for|repeat|handler|sqlstate|continue)\b/ig;
+					this.newText = this.rawText.replace(reg,function(word){
+						return word.toUpperCase();
+					});
+		    	}
+			}
+		  }
+		});
+		var app3 = new Vue({
+		  el: '#toBase64',
+		  data: {
+		  	rawText: "",
+		  	newText: ""
+		  },
+		  methods: {
+		    encodeBase64: function () {
+		    	if(this.rawText){
+					this.newText = window.btoa(unescape(encodeURIComponent(this.rawText)));
+		    	}
+			},
+			decodeBase64: function () {
+				if(this.rawText){
+					this.newText = decodeURIComponent(escape(window.atob(this.rawText)));
+		    	}
+			}
+		  }
+		});
+	</script>
+
+	<script type="text/javascript" color="0,0,255" opacity='0.7' zIndex="-2" count="150" src="./js/canvas-nest.min.js"></script>
+</body>
+</html>

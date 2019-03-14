@@ -4,7 +4,8 @@
 @import "{{ site.theme }}";
 
 #main_content_wrap {
-    background-image: url(../image/m31_gendler_2700.jpg);
+    background-image: url(../image/m31_gendler_2700.min.jpg);
+    background-repeat : no-repeat;
     background-position : 100% 100%;
     background-attachment : fixed
 };
